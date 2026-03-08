@@ -11,7 +11,13 @@ class Todo extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['category_id','content'];
+    protected $fillable = [
+        'category_id',
+        'content',
+        'deadline_day',
+        'priority',
+        'assignee'
+        ];
 
     public function category(){
         return $this->belongsTo(Category::class);
@@ -28,5 +34,18 @@ class Todo extends Model
             return $query->where('content','LIKE','%'. $keyword . '%');
         }
         return $query;
+    }
+
+    public function scopeDeadlineSearch($query, $deadline){
+        if (!empty($deadline)) {
+            return $query->where('deadline_day', $deadline);
+        }
+        return $query;
+    }
+
+    public function scopePrioritySearch($query, $priority){
+        if (!empty($priority)) {
+            return $query->where('priority', $priority);
+        }
     }
 }
